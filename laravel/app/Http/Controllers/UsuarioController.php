@@ -4,6 +4,8 @@ namespace Cinema\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Cinema\Http\Requests;
+use Cinema\Http\Requests\UserCreateRequest;
+use Cinema\Http\Requests\UserUpdateRequest;
 use Cinema\User;
 use Session;
 use Redirect;
@@ -36,7 +38,7 @@ class UsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserCreateRequest $request)
     {
         User::create([
             'name' => $request['name'], //Igual que los nombres del form
@@ -77,13 +79,13 @@ class UsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
       
         $user = User::find($id);
         $user->fill($request->all());
         $user->save();
-        Session::flash('message','UsuarioEditado Correctamente');
+        Session::flash('message','Usuario Editado Correctamente');
         return redirect('/usuario');
     }
 
@@ -95,6 +97,8 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::destroy($id);
+        Session::flash('message','Usuario Eliminado Correctamente');
+        return redirect('/usuario');
     }
 }
